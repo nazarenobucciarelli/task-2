@@ -1,4 +1,4 @@
-package com.solvd.task1.gui.utils;
+package com.solvd.task.gui.utils;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
