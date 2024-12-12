@@ -15,7 +15,7 @@ public class SearchTest extends AbstractGUITest {
 
     @Test(enabled = true)
     public void testSearchResults() {
-        HomePage homePage = new HomePage(driver);
+        HomePage homePage = new HomePage(getDriver());
         Header header = homePage.getHeader();
         header.typeSearchBox("something");
         SearchResultsPage searchResultsPage = header.clickSearchButton();
@@ -28,7 +28,7 @@ public class SearchTest extends AbstractGUITest {
 
     @Test(enabled = true)
     public void testEnterCategory() {
-        HomePage homePage = new HomePage(driver);
+        HomePage homePage = new HomePage(getDriver());
         Header header = homePage.getHeader();
         ShopByCategoryModal shopByCategoryModal = header.clickShopByCategoryButton();
         CategoryPage categoryPage = shopByCategoryModal.clickRandomCategory();

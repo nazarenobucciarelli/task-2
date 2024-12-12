@@ -1,27 +1,40 @@
 package com.solvd.task.gui;
 
-import com.solvd.task.gui.utils.WebDriverFactory;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 
 public abstract class AbstractGUITest {
 
-    protected WebDriver driver;
+    private static final ThreadLocal<WebDriver> driverThreadLocal = ThreadLocal.withInitial(() -> {
+        String driverPath = System.getProperty("user.dir") + "/src/test/resources/chromedriver";
+        System.setProperty("webdriver.chrome.driver", driverPath);
+        return new ChromeDriver();
+    });
 
     protected static final Logger logger = LoggerFactory.getLogger(AbstractGUITest.class);
 
-    @BeforeClass
-    public void setUp() {
-        driver = WebDriverFactory.createDriver();
-        driver.get("https://www.ebay.com");
+    protected WebDriver getDriver() {
+        return driverThreadLocal.get();
     }
 
-    @AfterClass
+    @BeforeMethod
+    public void setUp() {
+        WebDriver driver = getDriver();
+        driverThreadLocal.set(driver);
+        getDriver().get("https://www.ebay.com");
+    }
+
+    @AfterMethod
     public void tearDown() {
-        driver.quit();
+        WebDriver driver = getDriver();
+        if (driver != null) {
+            driver.quit();
+            driverThreadLocal.remove();
+        }
     }
 
 }
